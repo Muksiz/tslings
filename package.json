@@ -9,7 +9,8 @@
   },
   "scripts": {
     "start": "node bin/tslings.js",
-    "tslings": "node bin/tslings.js"
+    "tslings": "node bin/tslings.js",
+    "dev:check": "node bin/tslings.js dev check"
   },
   "engines": {
     "node": ">=20.10"

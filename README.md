@@ -98,7 +98,7 @@ To add an exercise, create it in `exercises/<section>/`, add a solution with the
 `solutions/`, register it in `src/info.ts`, and run:
 
 ```sh
-npm start -- dev check
+npm run dev:check
 ```
 
 This verifies that every solution passes and every unsolved exercise fails.
