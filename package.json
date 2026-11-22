@@ -1,0 +1,23 @@
+{
+  "name": "tslings",
+  "version": "0.1.0",
+  "description": "Small exercises to get you used to reading and writing TypeScript. Inspired by rustlings.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "tslings": "./bin/tslings.js"
+  },
+  "scripts": {
+    "start": "node bin/tslings.js",
+    "tslings": "node bin/tslings.js"
+  },
+  "engines": {
+    "node": ">=20.10"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}
