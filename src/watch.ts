@@ -21,7 +21,10 @@ export class WatchMode {
   private debounce: NodeJS.Timeout | undefined;
   private watcher: fs.FSWatcher | undefined;
 
-  constructor(private readonly state: State) {}
+  constructor(
+    private readonly state: State,
+    private readonly options: { manualRun?: boolean } = {},
+  ) {}
 
   start(): void {
     const stdin = process.stdin;
@@ -33,13 +36,15 @@ export class WatchMode {
     });
     process.stdout.on("resize", () => this.render());
 
-    this.watcher = fs.watch(EXERCISES_DIR, { recursive: true }, (_event, filename) => {
-      if (!filename || !filename.toString().endsWith(".ts")) return;
-      clearTimeout(this.debounce);
-      this.debounce = setTimeout(() => {
-        if (this.view === "exercise") void this.check();
-      }, 100);
-    });
+    if (!this.options.manualRun) {
+      this.watcher = fs.watch(EXERCISES_DIR, { recursive: true }, (_event, filename) => {
+        if (!filename || !filename.toString().endsWith(".ts")) return;
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          if (this.view === "exercise") void this.check();
+        }, 100);
+      });
+    }
 
     void this.check();
   }
@@ -258,7 +263,8 @@ export class WatchMode {
     const file = exercisePath(ex);
     out.push(`Current exercise: ${blue(link(relative(file), fileUrl(file)))}`);
     out.push("");
-    const keys = [r?.ok ? bold("n") + ":next" : "", "h:hint", "l:list", "c:check all", "x:reset", "r:rerun", "q:quit"];
+    const run = this.options.manualRun ? bold("r") + ":run" : "r:rerun";
+    const keys = [r?.ok ? bold("n") + ":next" : "", run, "h:hint", "l:list", "c:check all", "x:reset", "q:quit"];
     out.push(keys.filter(Boolean).join(" / "));
     return out;
   }

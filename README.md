@@ -31,6 +31,9 @@ In watch mode, these keys are available:
 | `r` | Re-run the current exercise                           |
 | `q` | Quit                                                  |
 
+If saving a file doesn't trigger a re-check (this can happen on WSL or network drives),
+start with `npm start -- --manual-run` and press `r` to run the exercise instead.
+
 Other commands:
 
 ```sh

@@ -20,6 +20,11 @@ Commands:
   check-all       Check every exercise and update your progress
   reset <name>    Reset an exercise to its original state
   dev check       (for maintainers) Verify all solutions pass and all exercises fail
+
+Options:
+  --manual-run    In watch mode, don't watch files for changes. Run the
+                  current exercise manually by pressing \`r\`. Useful when file
+                  change events don't work (e.g. WSL or network drives).
 `;
 
 function findExercise(name: string | undefined, state: State): ExerciseInfo {
@@ -33,7 +38,9 @@ function findExercise(name: string | undefined, state: State): ExerciseInfo {
 }
 
 async function main(): Promise<void> {
-  const [command, ...args] = process.argv.slice(2);
+  const argv = process.argv.slice(2);
+  const manualRun = argv.includes("--manual-run");
+  const [command, ...args] = argv.filter((arg) => arg !== "--manual-run");
   const firstRun = !State.exists();
   snapshotOriginals();
   const state = State.load();
@@ -51,7 +58,7 @@ async function main(): Promise<void> {
         console.log(bold("Press ENTER to start..."));
         await new Promise<void>((resolve) => process.stdin.once("data", () => resolve()));
       }
-      new WatchMode(state).start();
+      new WatchMode(state, { manualRun }).start();
       return;
     }
 
